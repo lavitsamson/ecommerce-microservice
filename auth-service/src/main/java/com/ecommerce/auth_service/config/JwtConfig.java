@@ -1,4 +1,3 @@
-
 package com.ecommerce.auth_service.config;
 
 import io.jsonwebtoken.*;
