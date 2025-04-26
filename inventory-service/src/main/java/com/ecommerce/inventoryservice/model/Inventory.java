@@ -1,4 +1,4 @@
-package product_service.model;
+package com.ecommerce.inventoryservice.model;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,14 +8,12 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Product {
+public class Inventory {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String description;
-    private Double price;
-    private Integer stock;
     private String skuCode;
+    private Integer quantity;
 }
