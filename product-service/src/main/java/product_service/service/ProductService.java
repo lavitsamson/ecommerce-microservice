@@ -42,4 +42,9 @@ public class ProductService {
     public void deleteProduct(Long id) {
         repository.deleteById(id);
     }
+
+    public boolean isProductExists(String skuCode) {
+        return repository.findBySkuCode(skuCode).isPresent();
+    }
+
 }

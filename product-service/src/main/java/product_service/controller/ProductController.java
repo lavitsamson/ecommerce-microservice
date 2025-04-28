@@ -35,4 +35,10 @@ public class ProductController {
     public void delete(@PathVariable Long id) {
         service.deleteProduct(id);
     }
+
+    @GetMapping("/validate")
+    public boolean isProductValid(@RequestParam String skuCode) {
+        return productService.isProductExists(skuCode);
+    }
+
 }

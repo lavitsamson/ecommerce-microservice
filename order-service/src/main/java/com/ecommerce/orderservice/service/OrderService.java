@@ -4,6 +4,7 @@ import com.ecommerce.orderservice.client.InventoryServiceClient;
 import com.ecommerce.orderservice.dto.OrderRequest;
 import com.ecommerce.orderservice.dto.OrderLineItemsDto;
 import com.ecommerce.orderservice.event.OrderPlacedEvent;
+import com.ecommerce.orderservice.event.StockDeductEvent;
 import com.ecommerce.orderservice.kafka.OrderProducer;
 import com.ecommerce.orderservice.model.Order;
 import com.ecommerce.orderservice.model.OrderLineItems;
@@ -34,10 +35,11 @@ public class OrderService {
         }
 
         // Proceed with saving the order
+        List<OrderLineItemsDto> orderedItems = orderRequest.getOrderLineItemsDtoList();
         Order order = Order.builder()
                 .orderNumber(UUID.randomUUID().toString())
                 .orderDate(LocalDateTime.now())
-                .orderLineItemsList(orderRequest.getOrderLineItemsDtoList()
+                .orderLineItemsList(orderedItems
                         .stream()
                         .map(this::mapToEntity)
                         .toList())
@@ -47,6 +49,11 @@ public class OrderService {
 
         // Send Kafka Event
         orderProducer.sendMessage(new OrderPlacedEvent(order.getOrderNumber()));
+
+        for (OrderLineItemsDto item : orderedItems) {
+            StockDeductEvent event = new StockDeductEvent(item.getSkuCode(), item.getQuantity());
+            orderProducer.sendStockDeductEvent(event);
+        }
 
         return "Order placed successfully!";
     }

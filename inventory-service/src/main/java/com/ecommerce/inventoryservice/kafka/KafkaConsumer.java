@@ -1,4 +1,4 @@
-package com.ecommerce.inventoryservice.event;
+package com.ecommerce.inventoryservice.kafka;
 
 import com.ecommerce.inventoryservice.event.ProductCreatedEvent;
 import com.ecommerce.inventoryservice.model.Inventory;
