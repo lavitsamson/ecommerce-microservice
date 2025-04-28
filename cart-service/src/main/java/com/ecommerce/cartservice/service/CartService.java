@@ -37,5 +37,16 @@ public class CartService {
         return cartRepository.save(cart);
     }
 
-    // getCart and removeItemFromCart remain the same
+    public Cart getCart(String userId) {
+        return cartRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Cart not found"));
+    }
+
+    public void removeItemFromCart(String userId, String skuCode) {
+        Cart cart = cartRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Cart not found"));
+
+        cart.getItems().removeIf(item -> item.getSkuCode().equals(skuCode));
+        cartRepository.save(cart);
+    }
 }
